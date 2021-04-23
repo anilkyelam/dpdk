@@ -102,6 +102,7 @@ mlx5_txpp_alloc_pp_index(struct mlx5_dev_ctx_shared *sh)
 	MLX5_SET(set_pp_rate_limit_context, &pp, rate_limit, rate);
 	MLX5_SET(set_pp_rate_limit_context, &pp, rate_mode,
 		 sh->txpp.test ? MLX5_DATA_RATE : MLX5_WQE_RATE);
+	DRV_LOG(INFO, "Packet pacing rate set to %" PRIu64, rate);
 	sh->txpp.pp = mlx5_glue->dv_alloc_pp
 				(sh->ctx, sizeof(pp), &pp,
 				 MLX5DV_PP_ALLOC_FLAGS_DEDICATED_INDEX);

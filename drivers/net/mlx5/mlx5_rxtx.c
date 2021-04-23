@@ -3194,6 +3194,8 @@ mlx5_tx_schedule_send(struct mlx5_txq_data *restrict txq,
 		      struct mlx5_txq_local *restrict loc,
 		      unsigned int olx)
 {
+	// DRV_LOG(DEBUG, "TX PP feature info. ol_flags: %lx, mask: %lx", 
+	// 			loc->mbuf->ol_flags, txq->ts_mask);
 	if (MLX5_TXOFF_CONFIG(TXPP) &&
 	    loc->mbuf->ol_flags & txq->ts_mask) {
 		struct mlx5_wqe *wqe;
@@ -4124,6 +4126,8 @@ mlx5_tx_burst_empw_simple(struct mlx5_txq_data *__rte_restrict txq,
 	MLX5_ASSERT(pkts_n > loc->pkts_sent);
 	pkts += loc->pkts_sent + 1;
 	pkts_n -= loc->pkts_sent;
+	// DRV_LOG(DEBUG, "Entered mlx5_tx_burst_empw_simple d");
+
 	for (;;) {
 		struct mlx5_wqe_dseg *__rte_restrict dseg;
 		struct mlx5_wqe_eseg *__rte_restrict eseg;
@@ -4134,6 +4138,7 @@ mlx5_tx_burst_empw_simple(struct mlx5_txq_data *__rte_restrict txq,
 next_empw:
 		MLX5_ASSERT(NB_SEGS(loc->mbuf) == 1);
 		if (MLX5_TXOFF_CONFIG(TXPP)) {
+			// DRV_LOG(DEBUG, "TX PP feature is on");
 			enum mlx5_txcmp_code wret;
 
 			/* Generate WAIT for scheduling if requested. */
@@ -4603,6 +4608,7 @@ mlx5_tx_burst_single_send(struct mlx5_txq_data *__rte_restrict txq,
 	MLX5_ASSERT(pkts_n > loc->pkts_sent);
 	pkts += loc->pkts_sent + 1;
 	pkts_n -= loc->pkts_sent;
+	
 	for (;;) {
 		struct mlx5_wqe *__rte_restrict wqe;
 		enum mlx5_txcmp_code ret;
@@ -4991,6 +4997,7 @@ send_loop:
 			 * per WQE, do it in dedicated routine.
 			 */
 enter_send_multi:
+			// DRV_LOG(WARNING, "tx send multi");
 			MLX5_ASSERT(loc.pkts_sent >= loc.pkts_copy);
 			part = loc.pkts_sent - loc.pkts_copy;
 			if (!MLX5_TXOFF_CONFIG(INLINE) && part) {
@@ -5098,6 +5105,7 @@ enter_send_tso:
 		 * offloads are requested at SQ configuration time).
 		 */
 enter_send_single:
+		// DRV_LOG(WARNING, "tx send single");	// This is usually the path taken.
 		MLX5_ASSERT(pkts_n > loc.pkts_sent);
 		ret = mlx5_tx_burst_single(txq, pkts, pkts_n, &loc, olx);
 		/*

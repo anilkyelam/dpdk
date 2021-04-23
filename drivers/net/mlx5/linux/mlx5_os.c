@@ -1234,6 +1234,8 @@ err_secondary:
 		sh->rq_ts_format = config->hca_attr.rq_ts_format;
 		sh->sq_ts_format = config->hca_attr.sq_ts_format;
 		sh->qp_ts_format = config->hca_attr.qp_ts_format;
+		DRV_LOG(DEBUG, "Device TS format support. RQ: %x, SQ: %x, QP: %x",
+			sh->rq_ts_format, sh->sq_ts_format, sh->qp_ts_format);
 		/* Check for LRO support. */
 		if (config->dest_tir && config->hca_attr.lro_cap &&
 		    config->dv_flow_en) {

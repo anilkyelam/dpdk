@@ -2249,7 +2249,8 @@ static struct mlx5_pci_driver mlx5_driver = {
 };
 
 /* Initialize driver log type. */
-RTE_LOG_REGISTER(mlx5_logtype, pmd.net.mlx5, NOTICE)
+/* Anil: This seems to override the global (and the configured) setting */
+RTE_LOG_REGISTER(mlx5_logtype, pmd.net.mlx5, DEBUG)
 
 /**
  * Driver initialization routine.
